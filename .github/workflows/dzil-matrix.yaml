@@ -4,6 +4,7 @@ on:
 
 jobs:
   build-tarball:
+    name: "Build dist archive"
     runs-on: ubuntu-latest
     outputs:
       perl-versions: ${{ steps.build-archive.outputs.perl-versions }}
@@ -13,6 +14,7 @@ jobs:
       uses: rjbs/dzil-actions/build@v0
 
   multiperl-test:
+    name: "Run dist tests"
     needs: build-tarball
     uses: rjbs/dzil-actions/.github/workflows/multiperl-test-matrix.yaml@v0
     with:
