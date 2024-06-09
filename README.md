@@ -37,7 +37,7 @@ Inputs to this workflow:
 
 ## Actions
 
-# `build`
+### `build`
 
 This action builds a CPAN-style tarball from your Dist::Zilla-style repository.
 
@@ -66,7 +66,7 @@ There are two outputs:
   action, generated using the `minimum-perl` output (above) as the `since-perl`
   parameter.
 
-# `test-tarball`
+### `test-tarball`
 
 This action runs the tests for a CPAN-style tarball and produces a simple
 summary report.
