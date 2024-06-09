@@ -3,6 +3,9 @@ description: "Build and upload a CPAN-style archive with Dist::Zilla"
 author: "Ricardo Signes"
 
 inputs:
+  install-dzil-from-cpan:
+    description: 'If true, get a Dist::Zilla install from CPAN, not apt'
+    default: 'false'
   dist-name:
     description: 'The name of the dist, like Your-Cool-Dist'
     default: ${{ github.event.repository.name }}
@@ -25,9 +28,14 @@ runs:
     run: |
       curl https://raw.githubusercontent.com/skaji/cpm/main/cpm > /tmp/cpm
       chmod u+x /tmp/cpm
-  - name: Install Dist::Zilla
+  - name: Install Dist::Zilla from apt
+    if: ${{ inputs.install-dzil-from-cpan != 'true' }}
     shell: bash
     run: sudo apt-get install -y libdist-zilla-perl libdist-zilla-plugin-git-perl libpod-weaver-perl
+  - name: Install Dist::Zilla from CPAN
+    if: ${{ inputs.install-dzil-from-cpan == 'true' }}
+    shell: bash
+    run: sudo /tmp/cpm install -g Dist-Zilla Dist-Zilla-Plugin-Git Pod-Weaver
   - name: Install authordeps
     shell: bash
     run: |
