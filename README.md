@@ -21,6 +21,11 @@ tests with all the major versions of perl that it claims to support.  It works
 by combining the `build` action and `multiperl-test-matrix` workflow, both
 described below.
 
+Inputs to this workflow:
+
+* `install-dzil-from-cpan`: This is passed through to the `build` action,
+  below.
+
 ### `multiperl-test-matrix`
 
 This uses the `rjbs/dzil-actions/test-tarball` action across a matrix of
@@ -55,6 +60,10 @@ Inputs to this action:
   need to provide this input.  It defaults to the name part of your repository.
   So, if your repo is `rjbs/Sub-Exporter`, the dist name will default to
   `Sub-Exporter` and the uploaded artifact will be `Sub-Exporter.tar.gz`.
+* `install-dzil-from-cpan`: Unless this input is set to `true`, the build
+  action may install Dist::Zilla (and some other basic requirements) from `apt`
+  instead of from CPAN.  This is faster, but means you might get an older
+  release of Dist::Zilla.
 
 There are two outputs:
 
