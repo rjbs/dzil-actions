@@ -16,7 +16,7 @@ jobs:
       matrix:
         perl-version: ${{ fromJson(inputs.perl-versions-json) }}
 
-    name: Run tests on v${{ matrix.perl-version }}
+    name: Run tests on ${{ matrix.perl-version }}
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
