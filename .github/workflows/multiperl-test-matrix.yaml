@@ -21,4 +21,4 @@ jobs:
 
     steps:
       - name: Test distribution
-        uses: rjbs/dzil-actions/test-tarball@main
+        uses: rjbs/dzil-actions/test-tarball@v0
