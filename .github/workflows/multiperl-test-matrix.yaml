@@ -9,13 +9,14 @@ on:
 
 jobs:
   multiperl-test:
-    name: "Run dist tests"
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         perl-version: ${{ fromJson(inputs.perl-versions-json) }}
+
+    name: Run tests on v${{ matrix.perl-version }}
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
