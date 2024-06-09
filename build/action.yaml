@@ -35,7 +35,7 @@ runs:
   - name: Install Dist::Zilla from CPAN
     if: ${{ inputs.install-dzil-from-cpan == 'true' }}
     shell: bash
-    run: sudo /tmp/cpm install -g Dist-Zilla Dist-Zilla-Plugin-Git Pod-Weaver
+    run: sudo /tmp/cpm install -g Dist::Zilla Dist::Zilla::Plugin::Git Pod::Weaver
   - name: Install authordeps
     shell: bash
     run: |

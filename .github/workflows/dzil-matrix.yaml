@@ -1,6 +1,11 @@
 name: "multiperl test"
 on:
-  workflow_call: ~
+  workflow_call:
+    inputs:
+      install-dzil-from-cpan:
+        description: 'If true, get a Dist::Zilla install from CPAN, not apt'
+        type: string
+        default: false
 
 jobs:
   build-tarball:
@@ -12,6 +17,8 @@ jobs:
     - name: Build archive
       id: build-archive
       uses: rjbs/dzil-actions/build@v0
+      with:
+        install-dzil-from-cpan: ${{ inputs.install-dzil-from-cpan }}
 
   multiperl-test:
     name: "Run dist tests"
