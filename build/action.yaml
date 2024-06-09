@@ -1,0 +1,73 @@
+name: "Build archive with Dist::Zilla"
+description: "Build and upload a CPAN-style archive with Dist::Zilla"
+author: "Ricardo Signes"
+
+inputs:
+  dist-name:
+    description: 'The name of the dist, like Your-Cool-Dist'
+    default: ${{ github.event.repository.name }}
+
+outputs:
+  minimum-perl:
+    description: "Minimum perl version from prereqs.runtime.requires"
+    value: ${{ steps.minimum-perl.outputs.minimum-perl }}
+  perl-versions:
+    description: "All perl version to test (from perl-actions/perl-versions)"
+    value: ${{ steps.perl-versions.outputs.perl-versions }}
+
+runs:
+  using: "composite"
+  steps:
+  - name: Check out repo
+    uses: actions/checkout@v4
+  - name: Install cpm
+    shell: bash
+    run: |
+      curl https://raw.githubusercontent.com/skaji/cpm/main/cpm > /tmp/cpm
+      chmod u+x /tmp/cpm
+  - name: Install Dist::Zilla
+    shell: bash
+    run: sudo apt-get install -y libdist-zilla-perl libdist-zilla-plugin-git-perl libpod-weaver-perl
+  - name: Install authordeps
+    shell: bash
+    run: |
+      dzil authordeps --missing > /tmp/deps-phase-1.txt
+      echo "---BEGIN AUTHORDEPS---"
+      cat /tmp/deps-phase-1.txt
+      echo "---END AUTHORDEPS---"
+      sudo /tmp/cpm install -g - < /tmp/deps-phase-1.txt
+  - name: Install missing prereqs
+    shell: bash
+    run: |
+      dzil listdeps --author --missing > /tmp/deps-phase-2.txt
+      echo "---BEGIN PREREQS---"
+      cat /tmp/deps-phase-2.txt
+      echo "---END PREREQS---"
+      sudo /tmp/cpm install -g - < /tmp/deps-phase-2.txt
+  - name: Build tarball
+    shell: bash
+    run: |
+      dzil build --in ${{ inputs.dist-name }}
+      tar zcvf ${{ inputs.dist-name }}.tar.gz ${{ inputs.dist-name }}
+  - name: Get minimum perl version
+    id: minimum-perl
+    shell: bash
+    run: |
+      PERL_MINIMUM=$(
+        jq --raw-output 'if (.prereqs.runtime.requires.perl == null) then "v5.8" else .prereqs.runtime.requires.perl end' ${{ inputs.dist-name }}/META.json
+      )
+      echo "minimum-perl $PERL_MINIMUM"
+      PERL_MINIMUM_NORMAL=$(perl -Mversion -E "say version->parse(q{$PERL_MINIMUM})->normal")
+      echo "minimum-perl-normal $PERL_MINIMUM_NORMAL"
+      echo "minimum-perl=$PERL_MINIMUM_NORMAL" >> $GITHUB_OUTPUT
+  - name: Get testable perl versions
+    id: perl-versions
+    uses: perl-actions/perl-versions@v1
+    with:
+      since-perl: ${{ steps.minimum-perl.outputs.minimum-perl }}
+      with-devel: true
+  - name: Upload tarball
+    uses: actions/upload-artifact@v4
+    with:
+      name: ${{ inputs.dist-name }}.tar.gz
+      path: ${{ inputs.dist-name }}.tar.gz

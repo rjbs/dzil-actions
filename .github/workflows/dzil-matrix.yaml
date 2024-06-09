@@ -1,0 +1,20 @@
+name: "multiperl test"
+on:
+  workflow_call: ~
+
+jobs:
+  build-tarball:
+    runs-on: ubuntu-latest
+    outputs:
+      perl-versions: ${{ steps.build-archive.outputs.perl-versions }}
+    steps:
+    - name: Build archive
+      id: build-archive
+      uses: rjbs/dzil-actions/build@main
+
+  multiperl-test:
+    needs: build-tarball
+    uses: rjbs/dzil-actions/.github/workflows/multiperl-test-matrix.yaml@main
+    with:
+      perl-versions-json: ${{ needs.build-tarball.outputs.perl-versions }}
+

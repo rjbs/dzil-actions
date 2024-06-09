@@ -1,0 +1,24 @@
+name: "Multi-perl test CPAN distribution"
+on:
+  workflow_call:
+    inputs:
+      perl-versions-json:
+        description: "JSON array of perls to test"
+        type: string
+        required: true
+
+jobs:
+  multiperl-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        perl-version: ${{ fromJson(inputs.perl-versions-json) }}
+
+    container:
+      image: perldocker/perl-tester:${{ matrix.perl-version }}
+
+    steps:
+      - name: Test distribution
+        uses: rjbs/dzil-actions/test-tarball@main
