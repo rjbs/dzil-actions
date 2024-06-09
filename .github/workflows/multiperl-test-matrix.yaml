@@ -9,6 +9,7 @@ on:
 
 jobs:
   multiperl-test:
+    name: "Run dist tests"
     runs-on: ubuntu-latest
 
     strategy:
