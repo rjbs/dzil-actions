@@ -20,6 +20,7 @@ jobs:
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
+      options: --init
 
     steps:
       - name: Test distribution
