@@ -29,10 +29,16 @@ runs:
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
     run: cpm install -g
-  - name: Makefile.PL
+  - name: Build distribution
+    # This step is a bit bananas, but was suggested by WOLFSAGE, and makes
+    # sense.  We want to build the distribution (like "perl Makefile.PL &&
+    # make") but to do so correctly with either Makefile.PL or Build.PL.  cpanm
+    # abstracts this for us.  --test-only says "do not install, just test", and
+    # -n says "but run no tests".  We'll replace this with something less
+    # bananas another day.
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
-    run: perl Makefile.PL
+    run: cpanm --test-only -n -v .
   - name: Install yath
     shell: bash
     run: cpm install -g Test2::Harness Test2::Harness::Renderer::JUnit
@@ -40,7 +46,7 @@ runs:
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
     run: |
-      JUNIT_TEST_FILE="/tmp/test-output.xml" ALLOW_PASSING_TODOS=1 TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter --renderer=JUnit -D
+      JUNIT_TEST_FILE="/tmp/test-output.xml" ALLOW_PASSING_TODOS=1 TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter --renderer=JUnit -b
   - name: Publish test report
     uses: mikepenz/action-junit-report@v4
     if: always() # always run even if the previous step fails
