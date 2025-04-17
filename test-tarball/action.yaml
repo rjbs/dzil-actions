@@ -29,6 +29,15 @@ runs:
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
     run: cpm install -g
+  - name: Optional packed-in test step
+    working-directory: ./${{ inputs.dist-name }}
+    shell: bash
+    run: |
+      if [ -x ./ci/before-build ]; then
+        ./ci/before-build
+      else
+        echo "No ./ci/before-build or it isn't +x"
+      fi
   - name: Build distribution
     # This step is a bit bananas, but was suggested by WOLFSAGE, and makes
     # sense.  We want to build the distribution (like "perl Makefile.PL &&
