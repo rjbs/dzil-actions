@@ -62,3 +62,12 @@ runs:
     with:
       check_name: JUnit Report (${{ matrix.perl-version }})
       report_paths: /tmp/test-output.xml
+  - name: Install development dependencies
+    working-directory: ./${{ inputs.dist-name }}
+    shell: bash
+    run: cpm install -g --metafile=META.json --with-all
+  - name: Run the author tests
+    working-directory: ./${{ inputs.dist-name }}
+    shell: bash
+    run: |
+      JUNIT_TEST_FILE="/tmp/test-output.xml" ALLOW_PASSING_TODOS=1 TEST2_UUID_NO_WARN=1 yath test --author-testing --renderer=Formatter --renderer=JUnit -b
