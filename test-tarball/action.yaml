@@ -24,7 +24,10 @@ runs:
       name: ${{ inputs.dist-name }}.tar.gz
   - name: Extract tarball
     shell: bash
-    run: tar zxvf ${{ inputs.dist-name }}.tar.gz
+    run: |
+      echo "::group::Extract tarball"
+      tar zxvf ${{ inputs.dist-name }}.tar.gz
+      echo "::endgroup::"
   - name: Install dependencies
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
@@ -47,10 +50,16 @@ runs:
     # bananas another day.
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
-    run: cpanm --test-only -n -v .
+    run: |
+      echo "::group::Build distribution"
+      cpanm --test-only -n -v .
+      echo "::endgroup::"
   - name: Install yath
     shell: bash
-    run: cpm install -g Test2::Harness Test2::Harness::Renderer::JUnit
+    run:
+      echo "::group::Install yath"
+      cpm install -g Test2::Harness Test2::Harness::Renderer::JUnit
+      echo "::endgroup::"
   - name: Run the tests
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
