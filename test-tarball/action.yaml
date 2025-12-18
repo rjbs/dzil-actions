@@ -64,7 +64,7 @@ runs:
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
     run: |
-      ALLOW_PASSING_TODOS=1 JUNIT_TEST_FILE="/tmp/test-output.xml" TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter --renderer=JUnit -b
+      ALLOW_PASSING_TODOS=1 AUTHOR_TESTING=1 JUNIT_TEST_FILE="/tmp/test-output.xml" TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter --renderer=JUnit -b
   - name: Publish test report
     uses: mikepenz/action-junit-report@v4
     if: always() # always run even if the previous step fails
