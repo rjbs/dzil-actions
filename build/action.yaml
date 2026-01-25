@@ -35,7 +35,7 @@ runs:
   - name: Install Dist::Zilla from CPAN
     if: ${{ inputs.install-dzil-from-cpan == 'true' }}
     shell: bash
-    run: sudo /tmp/cpm install -g Dist::Zilla Dist::Zilla::Plugin::Git Pod::Weaver
+    run: sudo /tmp/cpm install -g --show-build-log-on-failure Dist::Zilla Dist::Zilla::Plugin::Git Pod::Weaver
   - name: Install authordeps
     shell: bash
     run: |
@@ -43,7 +43,7 @@ runs:
       echo "---BEGIN AUTHORDEPS---"
       cat /tmp/deps-phase-1.txt
       echo "---END AUTHORDEPS---"
-      sudo /tmp/cpm install -g - < /tmp/deps-phase-1.txt
+      sudo /tmp/cpm install -g --show-build-log-on-failure - < /tmp/deps-phase-1.txt
   - name: Install missing prereqs
     shell: bash
     run: |
@@ -51,7 +51,7 @@ runs:
       echo "---BEGIN PREREQS---"
       cat /tmp/deps-phase-2.txt
       echo "---END PREREQS---"
-      sudo /tmp/cpm install -g - < /tmp/deps-phase-2.txt
+      sudo /tmp/cpm install -g --show-build-log-on-failure - < /tmp/deps-phase-2.txt
   - name: Build tarball
     shell: bash
     run: |

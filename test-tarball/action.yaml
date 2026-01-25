@@ -31,7 +31,7 @@ runs:
   - name: Install dependencies
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
-    run: cpm install -g
+    run: cpm install -g --show-build-log-on-failure
   - name: Optional packed-in test step
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
@@ -58,7 +58,7 @@ runs:
     shell: bash
     run:
       echo "::group::Install yath"
-      cpm install -g Test2::Harness Test2::Harness::Renderer::JUnit
+      cpm install -g --show-build-log-on-failure Test2::Harness Test2::Harness::Renderer::JUnit
       echo "::endgroup::"
   - name: Run the tests
     working-directory: ./${{ inputs.dist-name }}
