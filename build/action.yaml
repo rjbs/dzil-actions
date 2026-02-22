@@ -47,7 +47,7 @@ runs:
   - name: Install missing prereqs
     shell: bash
     run: |
-      dzil listdeps --author --missing > /tmp/deps-phase-2.txt
+      dzil listdeps --author --missing --no-recommends > /tmp/deps-phase-2.txt
       echo "---BEGIN PREREQS---"
       cat /tmp/deps-phase-2.txt
       echo "---END PREREQS---"
