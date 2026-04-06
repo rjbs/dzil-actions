@@ -66,6 +66,10 @@ runs:
       )
       echo "minimum-perl $PERL_MINIMUM"
       PERL_MINIMUM_NORMAL=$(perl -Mversion -E "say version->parse(q{$PERL_MINIMUM})->normal")
+      if [ "$PERL_MINIMUM_NORMAL" eq "v5.8.0" ]; then
+        echo "can't test on v5.8.0, bumping to v5.10.1"
+        PERL_MINIMUM_NORMAL=v5.10.1
+      fi
       echo "minimum-perl-normal $PERL_MINIMUM_NORMAL"
       echo "minimum-perl=$PERL_MINIMUM_NORMAL" >> $GITHUB_OUTPUT
   - name: Get testable perl versions
