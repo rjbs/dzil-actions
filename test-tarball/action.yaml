@@ -56,7 +56,7 @@ runs:
       echo "::endgroup::"
   - name: Install yath
     shell: bash
-    run:
+    run: |
       echo "::group::Install yath"
       cpm install -g --show-build-log-on-failure Test2::Harness Test2::Harness::Renderer::JUnit
       echo "::endgroup::"
