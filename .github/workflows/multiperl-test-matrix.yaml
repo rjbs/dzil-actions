@@ -19,7 +19,7 @@ jobs:
     name: Run tests on ${{ matrix.perl-version }}
 
     container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
+      image: ghcr.io/rjbs/perl-ci:${{ matrix.perl-version }}
       options: --init
 
     steps:
