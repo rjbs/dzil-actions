@@ -54,20 +54,8 @@ runs:
       echo "::group::Build distribution"
       cpanm --test-only -n -v .
       echo "::endgroup::"
-  - name: Install yath
-    shell: bash
-    run: |
-      echo "::group::Install yath"
-      cpm install -g --show-build-log-on-failure Test2::Harness Test2::Harness::Renderer::JUnit
-      echo "::endgroup::"
   - name: Run the tests
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
     run: |
-      ALLOW_PASSING_TODOS=1 AUTHOR_TESTING=1 JUNIT_TEST_FILE="/tmp/test-output.xml" TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter --renderer=JUnit -b
-  - name: Publish test report
-    uses: mikepenz/action-junit-report@v6
-    if: always() # always run even if the previous step fails
-    with:
-      check_name: JUnit Report (${{ matrix.perl-version }})
-      report_paths: /tmp/test-output.xml
+      ALLOW_PASSING_TODOS=1 AUTHOR_TESTING=1 TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter -b
