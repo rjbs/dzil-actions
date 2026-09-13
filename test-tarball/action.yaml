@@ -58,4 +58,4 @@ runs:
     working-directory: ./${{ inputs.dist-name }}
     shell: bash
     run: |
-      ALLOW_PASSING_TODOS=1 AUTHOR_TESTING=1 TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter -b
+      ALLOW_PASSING_TODOS=1 AUTHOR_TESTING=1 TEST2_UUID_NO_WARN=1 yath test --renderer=Formatter
